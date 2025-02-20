@@ -1,22 +1,18 @@
 import pulp
 
-# Ініціалізація моделі
 model = pulp.LpProblem("Maximize Profit", pulp.LpMaximize)
 
-# Визначення змінних
-A = pulp.LpVariable('A', lowBound=0, cat='Integer')  # Кількість продукту А
-B = pulp.LpVariable('B', lowBound=0, upBound=10, cat='Integer')  # Кількість продукту Б
+L = pulp.LpVariable('Lemonade', lowBound=0, cat='Integer')
+F = pulp.LpVariable('Fruits juice', lowBound=0, cat='Integer')
 
-# Функція цілі (Максимізація прибутку)
-model += 50 * A + 40 * B, "Profit"
+model += L + F, "Profit"
 
-# Додавання обмежень
-model += 5 * A + 2 * B <= 80  # Обмеження для машини №1
-model += 3 * A + 2 * B <= 40  # Обмеження для машини №2
+model += 2 * L + F <= 100  # Обмеження для water
+model += L <= 50  # Обмеження для Sugar
+model += L <= 30  # Обмеження для Lemon juice
+model += 2 * F <= 40  # Обмеження для Melted fruits
 
-# Розв'язання моделі
 model.solve()
 
-# Вивід результатів
-print("Виробляти продуктів А:", A.varValue)
-print("Виробляти продуктів Б:", B.varValue)
+print("Виробляти Lemonade:", L.varValue)
+print("Виробляти Fruits juice:", F.varValue)
